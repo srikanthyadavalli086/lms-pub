@@ -8,7 +8,6 @@ pipeline {
                 sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://3.83.98.175:9000" -e SONAR_LOGIN="sqp_05514a1a07ade4b54aa305a800348f343104c8fd" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
             }
         }
-
         
         stage('Build LMS') {
             steps {
@@ -17,7 +16,7 @@ pipeline {
             }
         }
 
-        stage('Release LMS') {
+        stage('Release LMS app') {
             steps {
                 script {
                     echo "Releasing.."       
