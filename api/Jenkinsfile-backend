@@ -7,7 +7,7 @@ pipeline {
     environment {
 
     DOCKERHUB_CREDENTIALS = credentials('mydockerhub')
-     registry = "srikanthyadavalli/lms-backend"
+     registry = "srikanthyadavalli/LMS-BACKEND"
         registryCredential = 'mydockerhub'
         dockerImage = ''
     }
@@ -17,22 +17,22 @@ pipeline {
         
         stage('Building docker image') {
             steps {
-                sh 'cd api && docker build -t srikanthyadavalli/lms-backend .'
+                sh 'cd api && docker build -t srikanthyadavalli/LMS-BACKEND .'
             }
         }
-        stage('Logging into dockerhub account') {
+        stage('Logging into the dockerhub account') {
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
-        stage('pushing the docker image into dockerhub') {
+        stage('pushing docker image into the dockerhub') {
             steps {
-                  sh 'docker push srikanthyadavalli/lms-backend'
+                  sh 'docker push srikanthyadavalli/LMS-BACKEND'
             }
         }
         stage('Remove old docker images') {
              steps {
-                 sh 'docker rmi -f srikanthyadavalli/lms-backend'
+                 sh 'docker rmi -f srikanthyadavalli/LMS-BACKEND'
             }
         }
          stage('creating database container') {
@@ -44,7 +44,7 @@ pipeline {
          stage('Running the docker container') {
             steps {
                   sh 'docker container rm --force backend'
-                  sh 'docker run -d -p 8080:8080 --network lmsnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres --name backend -e PORT=8080 -e MODE=local  srikanthyadavalli/lms-backend'
+                  sh 'docker run -d -p 8080:8080 --network lmsnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres --name backend -e PORT=8080 -e MODE=local  srikanthyadavalli/LMS-BACKEND'
             }
         }
     }
