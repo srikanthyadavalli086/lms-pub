@@ -2,7 +2,8 @@ pipeline {
     agent {
         label 'docker2'
     }
-        
+
+    stages {
         stage('Build LMS') {
             steps {
                 echo 'Building app....'
@@ -38,4 +39,5 @@ pipeline {
             }
         }
         
+    }
 }
