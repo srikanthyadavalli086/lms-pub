@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'docker2'
+    }
         
         stage('Build LMS') {
             steps {
