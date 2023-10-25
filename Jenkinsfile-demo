@@ -1,20 +1,42 @@
 pipeline {
-    agent any
+    agent {
+      label 'docker2'
+    }
+
+    environment {
+
+    DOCKERHUB_CREDENTIALS = credentials('mydockerhub')
+     registry = "srikanthyadavalli/frontend-lms"
+        registryCredential = 'mydockerhub'
+    }
 
     stages {
-        stage('PULL CODE FROM GITHUB') {
+        
+
+        stage('Building the docker image') {
             steps {
-                echo 'Pulling'
+                sh 'cd webapp && docker build -t srikanthyadavalli/frontend-lms .'
             }
         }
-        stage('BUILD') {
+        stage('Logging into dockerhub account') {
             steps {
-                echo 'Building application'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
-        stage('SONAR') {
+        stage('pushing the docker image into dockerhub') {
             steps {
-                echo 'PERFORMING SONAR ANALYSIS'
+                  sh 'docker push srikanthyadavalli/frontend-lms'
+            }
+        }
+        stage('Remove old docker images') {
+             steps {
+                 sh 'docker rmi -f srikanthyadavalli/frontend-lms'
+            }
+        }
+         stage('Running the docker container') {
+            steps {
+                  sh 'docker container rm --force fe'
+                  sh 'docker run -dt -p 8000:80 --name fe srikanthyadavalli/frontend-lms'
             }
         }
     }
