@@ -1,14 +1,14 @@
 Jenkins file 
 pipeline {
     agent{
-       label 'docker'
+       label 'docker2'
     }
 
     environment {
 
-    DOCKERHUB_CREDENTIALS = credentials('mydockerhub')
-     registry = "srikanthyadavalli/lms-backend-lms"
-        registryCredential = 'mydockerhub'
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub user')
+     registry = "srikanthyadavalli/backend-lms"
+        registryCredential = 'dockerhub user'
         dockerImage = ''
     }
 
@@ -17,7 +17,7 @@ pipeline {
         
         stage('Building docker image') {
             steps {
-                sh 'cd api && docker build -t srikanthyadavalli/lms-backend-lms .'
+                sh 'cd api && docker build -t srikanthyadavalli/backend-lms .'
             }
         }
         stage('Logging into the dockerhub account') {
@@ -27,12 +27,12 @@ pipeline {
         }
         stage('pushing docker image into the dockerhub') {
             steps {
-                  sh 'docker push srikanthyadavalli/lms-backend-lms'
+                  sh 'docker push srikanthyadavalli/backend-lms'
             }
         }
         stage('Remove old docker images') {
              steps {
-                 sh 'docker rmi -f srikanthyadavalli/lms-backend-lms'
+                 sh 'docker rmi -f srikanthyadavalli/backend-lms'
             }
         }
          stage('creating database container') {
@@ -44,7 +44,7 @@ pipeline {
          stage('Running the docker container') {
             steps {
                   sh 'docker container rm --force backend'
-                  sh 'docker run -d -p 8080:8080 --network lmsnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres --name backend -e PORT=8080 -e MODE=local  srikanthyadavalli/lms-backend-lms'
+                  sh 'docker run -d -p 8080:8080 --network lmsnetwork -e DATABASE_URL=postgresql://postgres:password@lmsdb:5432/postgres --name backend -e PORT=8080 -e MODE=local  srikanthyadavalli/backend-lms'
             }
         }
     }
