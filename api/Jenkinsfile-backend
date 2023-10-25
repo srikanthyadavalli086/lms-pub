@@ -1,14 +1,14 @@
 Jenkins file 
 pipeline {
     agent{
-       label 'docker2'
+       label 'docker1'
     }
 
     environment {
 
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub user')
+    DOCKERHUB_CREDENTIALS = credentials('mydockerhub')
      registry = "srikanthyadavalli/backend-lms"
-        registryCredential = 'dockerhub user'
+        registryCredential = 'mydockerhub'
         dockerImage = ''
     }
 
